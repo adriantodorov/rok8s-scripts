@@ -139,3 +139,6 @@ do
 done
 echo "[blocking_jobs_files]: ${BLOCKING_JOBS_FILES[@]}"
 echo ""
+
+CLUSTER_NAME=${CLUSTER_NAME:=unset}
+echo "[cluster_name]: $CLUSTER_NAME"

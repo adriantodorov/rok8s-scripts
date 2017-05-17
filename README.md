@@ -38,6 +38,9 @@ CONFIGMAPS=()
 # List of files ending in '.secret.yml' in the kube directory
 SECRETS=('example-app')
 
+# List of files ending in '.secret.sops.yml' in the kube directory
+SOPS_SECRETS=('example-app')
+
 # List of secrets to pull from S3
 S3_SECRETS=()
 
@@ -184,7 +187,6 @@ Example permissions:
 
 Secrets across clusters in the same namespace are not easily supported with this method as cluster names are not used. If you need to use the same namespace across different clusters (`kube-system` for example) then you should create separate buckets.
 
-
 ### minikube-build
 Switches to the minikube kubectl context, builds a Docker image from your current directory within the minikube Docker environment.
 
@@ -207,9 +209,43 @@ of all services that are accessible from your local machine
 Makes sure kubectl is installed and available for use. Customize the version
 by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 
+
 ## Assumptions
 
 * In your Deployment file, specify imagePullPolicy: IfNotPresent
+
+# Errata
+
+## SOPS
+
+Your circleci IAM user will need to have access to the KMS key via IAM.
+
+One may use a policy like this:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "circle-decrypt",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey"
+            ],
+            "Resource": [
+                "arn:aws:kms:<region>:<accountId>:key/<key>"
+            ]
+        }
+    ]
+}
+
+_Encrypt secret spec files with [sops](https://github.com/mozilla/sops)
+  eg. `sops --kms="<your kms key arn>" --encrypt mysecret.yaml` _
+  
+Ensure your circle.yml installs sops. I.e. add, `go get -u go.mozilla.org/sops/cmd/sops`
+
+
 
 # Releasing
 

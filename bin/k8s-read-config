@@ -138,7 +138,8 @@ do
   BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockingjob.yml)
 done
 echo "[blocking_jobs_files]: ${BLOCKING_JOBS_FILES[@]}"
-echo ""
 
-CLUSTER_NAME=${CLUSTER_NAME:=unset}
+CLUSTER_NAME=${CLUSTER_NAME}
 echo "[cluster_name]: $CLUSTER_NAME"
+
+echo ""

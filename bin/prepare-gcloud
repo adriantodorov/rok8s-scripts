@@ -6,10 +6,6 @@ if [[ -z "$GCP_PROJECT"  ]]; then
   exit 1
 fi
 
-if ! hash pyopenssl 2>/dev/null; then
-  pip install pyopenssl
-fi
-
 if ! hash gcloud 2>/dev/null; then
   sudo apt-get install google-cloud-sdk
 fi
